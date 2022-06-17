@@ -15,4 +15,11 @@
         <listener class="com.github.nowtilous.intellijprojectcolor.listeners.MyProjectManagerListener"
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
+    <actions>
+        <action id="ChooseColorAction" class="com.github.nowtilous.intellijprojectcolor.ChooseColorAction"
+                text="Choose Color Menu" description="Choose a title bar background color from the menu"
+                icon="AllIcons.Actions.Colors">
+            <add-to-group group-id="ToolbarRunGroup" anchor="last"/>
+        </action>
+    </actions>
 </idea-plugin>
