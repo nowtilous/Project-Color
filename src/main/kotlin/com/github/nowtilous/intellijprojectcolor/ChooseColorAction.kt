@@ -35,7 +35,7 @@ class ChooseColorAction : AnAction() {
 fun setTitleBarColor(color: Color, project: Project) {
 
     val titleBarComponent: Component = findTitleBarComponent(project) ?: return
-    disableExternalChangesToComponent(titleBarComponent, "background", project)
+    disableExternalChangesToComponentBackground(titleBarComponent, project)
 
     // set the color
     gProjectColorMap[project] = color
@@ -49,19 +49,18 @@ fun setTitleBarColor(color: Color, project: Project) {
  * Disable any unintended changes to given component of a project from external sources.
  *
  * @param component: component to lock changes to.
- * @param propertyName: property name of that component to prevent changes.
  * @param project: the project to which the component belongs to.
  *
  * @note registers a PropertyChangeListener for given property name which `aggressively`
  * reverts the color back to the one set by this plugin.
  */
-fun disableExternalChangesToComponent(component: Component, propertyName: String, project: Project) {
+fun disableExternalChangesToComponentBackground(component: Component, project: Project) {
     if (!gPatchedComponentMap.containsKey(component)) {
         gPatchedComponentMap[component] = false
     }
 
     if (gPatchedComponentMap[component] == false) {
-        component.addPropertyChangeListener(propertyName) {
+        component.addPropertyChangeListener("background") {
             if (it.newValue != (gProjectColorMap[project] as Color).rgb) {
                 component.background = gProjectColorMap[project]
             }
