@@ -13,7 +13,8 @@ since they all look the same on the taskbar, this plugin solves that by giving t
 to colorize each project's title bar, which is visible from the taskbar windows menu. 
 <!-- Plugin description end -->
 
-## Screenshots
+## Usage & Screenshots
+![](/screenshots/usage.gif)
 ![](/screenshots/desktop_multiple_projects.png)
 ![](/screenshots/color_picker_menu.png)
 ![](/screenshots/taskbar_view.png)
