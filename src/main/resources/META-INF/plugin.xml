@@ -7,12 +7,18 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.nowtilous.intellijprojectcolor.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.nowtilous.intellijprojectcolor.services.MyProjectService"/>
+        <projectService serviceImplementation="com.github.nowtilous.intellijprojectcolor.services.ProjectService"/>
     </extensions>
 
     <applicationListeners>
-        <listener class="com.github.nowtilous.intellijprojectcolor.listeners.MyProjectManagerListener"
+        <listener class="com.github.nowtilous.intellijprojectcolor.listeners.ProjectManagerListener"
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
+    <actions>
+        <action id="ChooseColorAction" class="com.github.nowtilous.intellijprojectcolor.ChooseColorAction"
+                text="Choose Color Menu" description="Choose a title bar background color from the menu"
+                icon="AllIcons.Actions.Colors">
+            <add-to-group group-id="ToolbarRunGroup" anchor="last"/>
+        </action>
+    </actions>
 </idea-plugin>
