@@ -14,9 +14,9 @@ to colorize each project's title bar, which is visible from the taskbar windows 
 <!-- Plugin description end -->
 
 ## Screenshots
-![](.\screenshots\desktop_multiple_projects.png)
-![](.\screenshots\color_picker_menu.png)
-![](.\screenshots\taskbar_view.png)
+![](/screenshots/desktop_multiple_projects.png)
+![](/screenshots/color_picker_menu.png)
+![](/screenshots/taskbar_view.png)
 
 ## Compatibility
 Supports all IDEs from version 2021.1 (211) and above!
