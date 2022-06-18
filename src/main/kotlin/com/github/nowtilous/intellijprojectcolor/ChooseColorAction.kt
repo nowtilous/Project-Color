@@ -18,15 +18,12 @@ val componentTrackedMap = mutableMapOf<Component, Boolean>()
 val currentProjectColor = mutableMapOf<Project, Color>()
 
 class ChooseColorAction : AnAction() {
-
-    private val mChooser = JColorChooser()
-    private lateinit var mActionEvent: AnActionEvent
     override fun actionPerformed(e: AnActionEvent) {
-        mActionEvent = e
-        mChooser.selectionModel.addChangeListener {
-            setTitleBarColor(mChooser.color, mActionEvent.dataContext.getData(PlatformDataKeys.PROJECT) as Project)
+        val colorChooser = JColorChooser()
+        colorChooser.selectionModel.addChangeListener {
+            setTitleBarColor(colorChooser.color, e.dataContext.getData(PlatformDataKeys.PROJECT) as Project)
         }
-        val dialog = JColorChooser.createDialog(null, "Choose a title bar color", true, mChooser, null, null)
+        val dialog = JColorChooser.createDialog(null, "Choose a title bar color", true, colorChooser, null, null)
         dialog.isVisible = true
     }
 

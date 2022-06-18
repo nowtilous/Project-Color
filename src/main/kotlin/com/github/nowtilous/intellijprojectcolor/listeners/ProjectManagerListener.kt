@@ -3,11 +3,11 @@ package com.github.nowtilous.intellijprojectcolor.listeners
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManagerListener
-import com.github.nowtilous.intellijprojectcolor.services.MyProjectService
+import com.github.nowtilous.intellijprojectcolor.services.ProjectService
 
-internal class MyProjectManagerListener : ProjectManagerListener {
+internal class ProjectManagerListener : ProjectManagerListener {
 
     override fun projectOpened(project: Project) {
-        project.service<MyProjectService>()
+        project.service<ProjectService>()
     }
 }
