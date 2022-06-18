@@ -14,8 +14,8 @@ import javax.swing.JFrame
 
 const val COLOR_SETTING_PATH = "com.github.nowtilous.intellijprojectcolor.rgb"
 
-val componentTrackedMap = mutableMapOf<Component, Boolean>()
-val currentProjectColor = mutableMapOf<Project, Color>()
+val gPatchedComponentMap = mutableMapOf<Component, Boolean>()
+val gProjectColorMap = mutableMapOf<Project, Color>()
 
 class ChooseColorAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
@@ -28,48 +28,73 @@ class ChooseColorAction : AnAction() {
     }
 
 }
+
+/**
+ * Set title bar color with given color for given project.
+ */
 fun setTitleBarColor(color: Color, project: Project) {
+
+    val titleBarComponent: Component = findTitleBarComponent(project) ?: return
+    disableExternalChangesToComponent(titleBarComponent, "background", project)
+
+    // set the color
+    gProjectColorMap[project] = color
+    titleBarComponent.background = color
+
+    // save color config for persistence
+    PropertiesComponent.getInstance(project).setValue(COLOR_SETTING_PATH, color.rgb, 0)
+}
+
+/**
+ * Disable any unintended changes to given component of a project from external sources.
+ *
+ * @param component: component to lock changes to.
+ * @param propertyName: property name of that component to prevent changes.
+ * @param project: the project to which the component belongs to.
+ *
+ * @note registers a PropertyChangeListener for given property name which `aggressively`
+ * reverts the color back to the one set by this plugin.
+ */
+fun disableExternalChangesToComponent(component: Component, propertyName: String, project: Project) {
+    if (!gPatchedComponentMap.containsKey(component)) {
+        gPatchedComponentMap[component] = false
+    }
+
+    if (gPatchedComponentMap[component] == false) {
+        component.addPropertyChangeListener(propertyName) {
+            if (it.newValue != (gProjectColorMap[project] as Color).rgb) {
+                component.background = gProjectColorMap[project]
+            }
+        }
+
+        gPatchedComponentMap[component] = true
+    }
+}
+
+/**
+ * Find title bar java component for given project.
+ *
+ * @note searches using java swing object names, which might change in future versions.
+ * @returns the component if found, null otherwise.
+ */
+fun findTitleBarComponent(project: Project): Component? {
     val mainIdeComponent = (WindowManager.getInstance().getFrame(project) as JFrame).getComponent(0) as Container
     var mainComponentPane: Container? = null
     var titleBarComponent: Component? = null
 
-    for (component in mainIdeComponent.components){
-        if("JBLayeredPane" in component.toString()){
+    for (component in mainIdeComponent.components) {
+        if ("JBLayeredPane" in component.toString()) {
             mainComponentPane = component as Container
         }
     }
-    if (mainComponentPane == null) {
-        return
-    }
 
-    for(component in mainComponentPane.components){
-        if ("MenuFrameHeader" in component.toString()){
-            titleBarComponent = component
-        }
-    }
-
-    if (titleBarComponent == null) {
-        return
-    }
-
-
-    if(!componentTrackedMap.containsKey(titleBarComponent)){
-        componentTrackedMap[titleBarComponent] = false
-    }
-
-    if(componentTrackedMap[titleBarComponent] == false){
-        titleBarComponent.addPropertyChangeListener("background") {
-            if (it.newValue != (currentProjectColor[project] as Color).rgb) {
-                titleBarComponent.background = currentProjectColor[project]
+    if (mainComponentPane != null) {
+        for (component in mainComponentPane.components) {
+            if ("MenuFrameHeader" in component.toString()) {
+                titleBarComponent = component
             }
         }
-
-        componentTrackedMap[titleBarComponent] = true
     }
 
-    currentProjectColor[project] = color
-    titleBarComponent.background = color
-
-    PropertiesComponent.getInstance(project).setValue(COLOR_SETTING_PATH,color.rgb, 0)
+    return titleBarComponent
 }
-
