@@ -1,6 +1,6 @@
 <!-- Keep a Changelog guide -> https://keepachangelog.com -->
 
-# Intellij-Project-Color Changelog
+# Project-Color Changelog
 
 ## [Unreleased]
 ### Added

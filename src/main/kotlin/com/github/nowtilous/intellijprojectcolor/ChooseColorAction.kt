@@ -12,7 +12,7 @@ import java.awt.Container
 import javax.swing.JColorChooser
 import javax.swing.JFrame
 
-const val COLOR_SETTING_PATH = "com.github.nowtilous.intellijprojectcolor.rgb"
+const val COLOR_SETTING_PATH = "com.github.nowtilous.projectcolor.rgb"
 
 val gPatchedComponentMap = mutableMapOf<Component, Boolean>()
 val gProjectColorMap = mutableMapOf<Project, Color>()
