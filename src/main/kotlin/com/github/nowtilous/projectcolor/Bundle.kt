@@ -1,4 +1,4 @@
-package com.github.nowtilous.intellijprojectcolor
+package com.github.nowtilous.projectcolor
 
 import com.intellij.DynamicBundle
 import org.jetbrains.annotations.NonNls

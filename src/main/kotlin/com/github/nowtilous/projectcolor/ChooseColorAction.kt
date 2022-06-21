@@ -1,4 +1,4 @@
-package com.github.nowtilous.intellijprojectcolor
+package com.github.nowtilous.projectcolor
 
 import com.intellij.ide.util.PropertiesComponent
 import com.intellij.openapi.actionSystem.AnAction

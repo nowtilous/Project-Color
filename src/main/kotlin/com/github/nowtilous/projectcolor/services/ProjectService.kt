@@ -1,7 +1,7 @@
-package com.github.nowtilous.intellijprojectcolor.services
+package com.github.nowtilous.projectcolor.services
 
-import com.github.nowtilous.intellijprojectcolor.COLOR_SETTING_PATH
-import com.github.nowtilous.intellijprojectcolor.setTitleBarColor
+import com.github.nowtilous.projectcolor.COLOR_SETTING_PATH
+import com.github.nowtilous.projectcolor.setTitleBarColor
 import com.intellij.ide.util.PropertiesComponent
 import com.intellij.openapi.project.Project
 import java.awt.Color
