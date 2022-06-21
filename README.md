@@ -6,14 +6,15 @@
 
 
 <!-- Plugin description -->
-Remember open projects by color! Colorize your title bar to differentiate your open projects.
+Remember your projects by color! Colorize the title bar to differentiate your open projects.
 
-Working on multiple project simultaneously with intellij products can be difficult, 
+Working on multiple projects simultaneously with intellij products can be difficult, 
 since they all look the same on the taskbar, this plugin solves that by giving the user the option
 to colorize each project's title bar, which is visible from the taskbar windows menu. 
 <!-- Plugin description end -->
 
-## Screenshots
+## Usage & Screenshots
+![](/screenshots/usage.gif)
 ![](/screenshots/desktop_multiple_projects.png)
 ![](/screenshots/color_picker_menu.png)
 ![](/screenshots/taskbar_view.png)

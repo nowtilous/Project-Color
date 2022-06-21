@@ -6,6 +6,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.PlatformDataKeys
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.WindowManager
+import com.intellij.ui.ColorUtil
 import java.awt.Color
 import java.awt.Component
 import java.awt.Container
@@ -40,13 +41,34 @@ fun setTitleBarColor(color: Color, project: Project) {
     // set the color
     gProjectColorMap[project] = color
     titleBarComponent.background = color
+    recursiveSetForeground(titleBarComponent as Container, if (ColorUtil.isDark(color)) Color.white else Color.black)
+    // TODO patch foreground for project label to violently revert the color like background
 
     // save color config for persistence
     PropertiesComponent.getInstance(project).setValue(COLOR_SETTING_PATH, color.rgb, 0)
 }
 
 /**
+ * Set foreground recursively for given component,
+ * since intellij overrides this property specifically
+ * somewhere down the component tree :(
+ *
+ * @param container: the root component (as container)
+ * @param color: color to set the foreground to
+ */
+fun recursiveSetForeground(container: Container, color: Color) {
+    container.foreground = color
+    for (comp in container.components) {
+        if ((comp as Container).components.isNotEmpty()) {
+            recursiveSetForeground(comp, color)
+        }
+        comp.foreground = color
+    }
+}
+
+/**
  * Disable any unintended changes to given component of a project from external sources.
+ *
  *
  * @param component: component to lock changes to.
  * @param project: the project to which the component belongs to.
