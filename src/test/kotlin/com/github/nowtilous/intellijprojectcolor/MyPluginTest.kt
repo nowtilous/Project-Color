@@ -1,4 +1,4 @@
-package com.github.nowtilous.projectcolor
+package com.github.nowtilous.intellijprojectcolor
 
 import com.intellij.ide.highlighter.XmlFileType
 import com.intellij.psi.xml.XmlFile
