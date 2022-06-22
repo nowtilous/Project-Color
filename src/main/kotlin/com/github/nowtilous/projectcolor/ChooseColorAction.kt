@@ -1,6 +1,5 @@
 package com.github.nowtilous.projectcolor
 
-import com.google.zxing.NotFoundException
 import com.intellij.ide.util.PropertiesComponent
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
@@ -28,6 +27,7 @@ class ChooseColorAction : AnAction() {
         }
         val dialog = JColorChooser.createDialog(null, "Choose a title bar color", true, colorChooser, null, null)
         dialog.isVisible = true
+        dialog.dispose()
     }
 
 }
@@ -39,8 +39,8 @@ fun setTitleBarColor(color: Color, project: Project) {
 
     val titleBarComponent: Container = findTitleBarComponent(project) as Container
     val projectLabelComponent: Component = findProjectLabelComponent(titleBarComponent)
-    disableExternalChangesToComponentProperty(project, titleBarComponent, "background")
-    disableExternalChangesToComponentProperty(project, projectLabelComponent, "foreground")
+    lockComponentColorProperty(project, titleBarComponent, "background")
+    lockComponentColorProperty(project, projectLabelComponent, "foreground")
 
     // set the color
     gProjectColorMap[project] = color
@@ -73,7 +73,6 @@ fun recursiveSetForeground(container: Container, color: Color) {
 /**
  * Disable any unintended changes to given component of a project from external sources.
  *
- *
  * @param component: component to lock changes to.
  * @param project: the project to which the component belongs to.
  * @param property: the property which we want to lock.
@@ -81,7 +80,7 @@ fun recursiveSetForeground(container: Container, color: Color) {
  * @note registers a PropertyChangeListener for given property name which `aggressively`
  * reverts the color back to the one set by this plugin.
  */
-fun disableExternalChangesToComponentProperty(project: Project, component: Component, property: String) {
+fun lockComponentColorProperty(project: Project, component: Component, property: String) {
     if (!gColorLockedComponentMap.containsKey(component)) {
         gColorLockedComponentMap[component] = false
     }
