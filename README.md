@@ -13,16 +13,18 @@ since they all look the same on the taskbar, this plugin solves that by giving t
 to colorize each project's title bar, which is visible from the taskbar windows menu. 
 <!-- Plugin description end -->
 
-## Usage & Screenshots
+## Usage & Screenshots ⌨️🖱️
 ![](/screenshots/usage.gif)
 ![](/screenshots/desktop_multiple_projects.png)
 ![](/screenshots/color_picker_menu.png)
 ![](/screenshots/taskbar_view.png)
 
-## Compatibility
-Supports all IDEs from version 2021.1 (211) and above!
+## Compatibility ⚙️
+Supports all Intellij IDEs from version 2021.1 (211) and above!
+> ✅ Tested on all versions from 2021.1 to 2022.1 
 
-## Installation
+> ⚠️ Probably doesn't work on MacOS☹️
+## Installation 🛠️
 
 - Using IDE built-in plugin system:
   
