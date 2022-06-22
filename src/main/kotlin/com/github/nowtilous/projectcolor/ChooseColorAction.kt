@@ -1,5 +1,6 @@
 package com.github.nowtilous.projectcolor
 
+import com.google.zxing.NotFoundException
 import com.intellij.ide.util.PropertiesComponent
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
@@ -10,12 +11,13 @@ import com.intellij.ui.ColorUtil
 import java.awt.Color
 import java.awt.Component
 import java.awt.Container
+import java.security.InvalidParameterException
 import javax.swing.JColorChooser
 import javax.swing.JFrame
 
 const val COLOR_SETTING_PATH = "com.github.nowtilous.projectcolor.rgb"
 
-val gPatchedComponentMap = mutableMapOf<Component, Boolean>()
+val gColorLockedComponentMap = mutableMapOf<Component, Boolean>()
 val gProjectColorMap = mutableMapOf<Project, Color>()
 
 class ChooseColorAction : AnAction() {
@@ -35,14 +37,15 @@ class ChooseColorAction : AnAction() {
  */
 fun setTitleBarColor(color: Color, project: Project) {
 
-    val titleBarComponent: Component = findTitleBarComponent(project) ?: return
-    disableExternalChangesToComponentBackground(titleBarComponent, project)
+    val titleBarComponent: Container = findTitleBarComponent(project) as Container
+    val projectLabelComponent: Component = findProjectLabelComponent(titleBarComponent)
+    disableExternalChangesToComponentProperty(project, titleBarComponent, "background")
+    disableExternalChangesToComponentProperty(project, projectLabelComponent, "foreground")
 
     // set the color
     gProjectColorMap[project] = color
     titleBarComponent.background = color
-    recursiveSetForeground(titleBarComponent as Container, if (ColorUtil.isDark(color)) Color.white else Color.black)
-    // TODO patch foreground for project label to violently revert the color like background
+    recursiveSetForeground(titleBarComponent, if (ColorUtil.isDark(color)) Color.white else Color.black)
 
     // save color config for persistence
     PropertiesComponent.getInstance(project).setValue(COLOR_SETTING_PATH, color.rgb, 0)
@@ -51,7 +54,8 @@ fun setTitleBarColor(color: Color, project: Project) {
 /**
  * Set foreground recursively for given component,
  * since intellij overrides this property specifically
- * somewhere down the component tree :(
+ * somewhere down the component tree, this needs to be set at all components
+ * in order to actually change the foreground color:(
  *
  * @param container: the root component (as container)
  * @param color: color to set the foreground to
@@ -72,23 +76,29 @@ fun recursiveSetForeground(container: Container, color: Color) {
  *
  * @param component: component to lock changes to.
  * @param project: the project to which the component belongs to.
+ * @param property: the property which we want to lock.
  *
  * @note registers a PropertyChangeListener for given property name which `aggressively`
  * reverts the color back to the one set by this plugin.
  */
-fun disableExternalChangesToComponentBackground(component: Component, project: Project) {
-    if (!gPatchedComponentMap.containsKey(component)) {
-        gPatchedComponentMap[component] = false
+fun disableExternalChangesToComponentProperty(project: Project, component: Component, property: String) {
+    if (!gColorLockedComponentMap.containsKey(component)) {
+        gColorLockedComponentMap[component] = false
     }
 
-    if (gPatchedComponentMap[component] == false) {
-        component.addPropertyChangeListener("background") {
+    if (gColorLockedComponentMap[component] == false) {
+        component.addPropertyChangeListener(property) {
             if (it.newValue != (gProjectColorMap[project] as Color).rgb) {
-                component.background = gProjectColorMap[project]
+                val color = gProjectColorMap[project] as Color
+                when (property) {
+                    "background" -> component.background = color
+                    "foreground" -> component.foreground = if (ColorUtil.isDark(color)) Color.white else Color.black
+                    else -> throw InvalidParameterException("Unsupported property given!")
+                }
             }
         }
 
-        gPatchedComponentMap[component] = true
+        gColorLockedComponentMap[component] = true
     }
 }
 
@@ -96,12 +106,12 @@ fun disableExternalChangesToComponentBackground(component: Component, project: P
  * Find title bar java component for given project.
  *
  * @note searches using java swing object names, which might change in future versions.
+ * @throws ClassNotFoundException if none found
  * @returns the component if found, null otherwise.
  */
-fun findTitleBarComponent(project: Project): Component? {
+fun findTitleBarComponent(project: Project): Component {
     val mainIdeComponent = (WindowManager.getInstance().getFrame(project) as JFrame).getComponent(0) as Container
     var mainComponentPane: Container? = null
-    var titleBarComponent: Component? = null
 
     for (component in mainIdeComponent.components) {
         if ("JBLayeredPane" in component.toString()) {
@@ -112,10 +122,24 @@ fun findTitleBarComponent(project: Project): Component? {
     if (mainComponentPane != null) {
         for (component in mainComponentPane.components) {
             if ("MenuFrameHeader" in component.toString()) {
-                titleBarComponent = component
+                return component
             }
         }
     }
 
-    return titleBarComponent
+    throw ClassNotFoundException()
+}
+
+/**
+ * Find project label component with root title bar component.
+ * @throws ClassNotFoundException if none found
+ */
+fun findProjectLabelComponent(titleBarComponent: Container): Component {
+    for (component in titleBarComponent.components) {
+        if ("titleLabel" in component.toString()) {
+            return (component as Container).getComponent(0)
+        }
+    }
+
+    throw ClassNotFoundException()
 }
