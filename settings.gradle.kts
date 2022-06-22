@@ -1,1 +1,1 @@
-rootProject.name = "Intellij-Project-Color"
+rootProject.name = "Project-Color"
