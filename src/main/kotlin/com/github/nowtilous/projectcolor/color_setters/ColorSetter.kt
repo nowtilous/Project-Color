@@ -17,8 +17,6 @@ abstract class ColorSetter {
 
     abstract fun setTitleBar(color: Color, project: Project)
 
-//    abstract fun findTitleBarComponent(project: Project): Component
-
     /**
      * Set foreground recursively for given component,
      * since intellij overrides this property specifically
