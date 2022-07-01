@@ -14,9 +14,8 @@ class MacOSColorSetter : ColorSetter() {
         val navBarComponent = findTitleBarComponent(project) as Container
         val filePathComponent = findFilePathComponent(navBarComponent)
 
+        recursiveSetbackground(navBarComponent, color)
         recursiveSetForeground(filePathComponent, getForegroundColorBasedOnBrightness(color))
-
-        navBarComponent.background = color
         lockComponentColorProperty(project, navBarComponent, "background")
     }
 

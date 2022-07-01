@@ -35,6 +35,15 @@ abstract class ColorSetter {
             comp.foreground = color
         }
     }
+    protected fun recursiveSetbackground(container: Container, color: Color) {
+        container.background = color
+        for (comp in container.components) {
+            if ((comp as Container).components.isNotEmpty()) {
+                recursiveSetForeground(comp, color)
+            }
+            comp.background = color
+        }
+    }
 
     /**
      * Disable any unintended changes to given component of a project from external sources.
