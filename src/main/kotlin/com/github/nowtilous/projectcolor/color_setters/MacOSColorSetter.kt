@@ -1,67 +1,23 @@
 package com.github.nowtilous.projectcolor.color_setters
 
+import com.github.nowtilous.projectcolor.utils.getForegroundColorBasedOnBrightness
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.wm.WindowManager
-import com.intellij.ui.ColorUtil
 import java.awt.Color
-import java.awt.Component
 import java.awt.Container
-import javax.swing.JFrame
 
 class MacOSColorSetter : ColorSetter() {
+
+    override val TITLE_BAR_COMPONENT_PATH = listOf("JBLayeredPane", "JBPanel", "NonOpaquePanel", "JBBox", "navbar")
 
     override fun setTitleBar(color: Color, project: Project) {
 
         val navBarComponent = findTitleBarComponent(project) as Container
+        val filePathComponent = findFilePathComponent(navBarComponent)
 
-        recursiveSetForeground(
-            findFilePathComponent(navBarComponent),
-            if (ColorUtil.isDark(color)) Color.white else Color.black
-        )
+        recursiveSetForeground(filePathComponent, getForegroundColorBasedOnBrightness(color))
 
         navBarComponent.background = color
         lockComponentColorProperty(project, navBarComponent, "background")
-    }
-
-    override fun findTitleBarComponent(project: Project): Component {
-        val mainIdeComponent = (WindowManager.getInstance().getFrame(project) as JFrame).getComponent(0) as Container
-        var mainComponentPane: Container? = null
-
-        for (component in mainIdeComponent.components) {
-            if ("JBLayeredPane" in component.toString()) {
-                mainComponentPane = component as Container
-                break
-            }
-        }
-
-        for (component in (mainComponentPane as Container).components) {
-            if ("JBPanel" in component.toString()) {
-                mainComponentPane = component as Container
-                break
-            }
-        }
-
-        for (component in (mainComponentPane as Container).components) {
-            if ("NonOpaquePanel" in component.toString()) {
-                mainComponentPane = component as Container
-                break
-            }
-        }
-
-        for (component in (mainComponentPane as Container).components) {
-            if ("JBBox" in component.toString()) {
-                mainComponentPane = component as Container
-                break
-            }
-        }
-
-        for (component in (mainComponentPane as Container).components) {
-            if ("navbar" in component.toString()) {
-                return component
-            }
-        }
-
-        throw ClassNotFoundException()
     }
 
     private fun findFilePathComponent(navBarComponent: Container): Container {

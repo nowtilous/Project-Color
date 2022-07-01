@@ -3,17 +3,21 @@ package com.github.nowtilous.projectcolor.color_setters
 import com.github.nowtilous.projectcolor.gColorLockedComponentMap
 import com.github.nowtilous.projectcolor.gProjectColorMap
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.wm.WindowManager
 import com.intellij.ui.ColorUtil
 import java.awt.Color
 import java.awt.Component
 import java.awt.Container
 import java.security.InvalidParameterException
+import javax.swing.JFrame
 
 abstract class ColorSetter {
 
+    abstract val TITLE_BAR_COMPONENT_PATH: List<String>
+
     abstract fun setTitleBar(color: Color, project: Project)
 
-    abstract fun findTitleBarComponent(project: Project): Component
+//    abstract fun findTitleBarComponent(project: Project): Component
 
     /**
      * Set foreground recursively for given component,
@@ -28,19 +32,9 @@ abstract class ColorSetter {
         container.foreground = color
         for (comp in container.components) {
             if ((comp as Container).components.isNotEmpty()) {
-                recursiveSetBackground(comp, color)
-            }
-            comp.foreground = color
-        }
-    }
-
-    protected fun recursiveSetBackground(container: Container, color: Color) {
-        container.background = color
-        for (comp in container.components) {
-            if ((comp as Container).components.isNotEmpty()) {
                 recursiveSetForeground(comp, color)
             }
-            comp.background = color
+            comp.foreground = color
         }
     }
 
@@ -73,6 +67,28 @@ abstract class ColorSetter {
 
             gColorLockedComponentMap[component] = true
         }
+    }
+
+    protected open fun findTitleBarComponent(project: Project): Component{
+        val mainIdeComponent = (WindowManager.getInstance().getFrame(project) as JFrame).getComponent(0) as Container
+
+        var currentComponent = mainIdeComponent
+        var found = false
+
+        for(componentName in TITLE_BAR_COMPONENT_PATH){
+            for (component in currentComponent.components) {
+                if (componentName in component.toString()) {
+                    currentComponent = component as Container
+                    found = true
+                    break
+                }
+            }
+
+            if (!found) throw ClassNotFoundException()
+            found = false
+        }
+
+        return currentComponent
     }
 
 }
