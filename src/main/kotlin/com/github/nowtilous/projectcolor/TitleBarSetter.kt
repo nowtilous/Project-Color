@@ -1,5 +1,6 @@
 package com.github.nowtilous.projectcolor
 
+import com.github.nowtilous.projectcolor.color_setters.gColorSetter
 import com.intellij.ide.util.PropertiesComponent
 import com.intellij.openapi.project.Project
 import java.awt.Color
@@ -15,8 +16,7 @@ val gProjectColorMap = mutableMapOf<Project, Color>()
  */
 fun setTitleBarColor(color: Color, project: Project) {
 
-
-
+    gColorSetter.setTitleBar(color, project)
     // save color config for persistence
     PropertiesComponent.getInstance(project).setValue(COLOR_SETTING_PATH, color.rgb, 0)
 }
