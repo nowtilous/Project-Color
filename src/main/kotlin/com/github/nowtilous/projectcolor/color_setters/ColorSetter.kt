@@ -28,9 +28,19 @@ abstract class ColorSetter {
         container.foreground = color
         for (comp in container.components) {
             if ((comp as Container).components.isNotEmpty()) {
-                recursiveSetForeground(comp, color)
+                recursiveSetBackground(comp, color)
             }
             comp.foreground = color
+        }
+    }
+
+    protected fun recursiveSetBackground(container: Container, color: Color) {
+        container.background = color
+        for (comp in container.components) {
+            if ((comp as Container).components.isNotEmpty()) {
+                recursiveSetForeground(comp, color)
+            }
+            comp.background = color
         }
     }
 
@@ -51,7 +61,7 @@ abstract class ColorSetter {
 
         if (gColorLockedComponentMap[component] == false) {
             component.addPropertyChangeListener(property) {
-                if (it.newValue != (gProjectColorMap[project] as Color).rgb) {
+                if (project in gProjectColorMap && it.newValue != (gProjectColorMap[project] as Color).rgb) {
                     val color = gProjectColorMap[project] as Color
                     when (property) {
                         "background" -> component.background = color

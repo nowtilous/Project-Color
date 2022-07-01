@@ -38,6 +38,7 @@ class WindowsColorSetter: ColorSetter() {
         for (component in mainIdeComponent.components) {
             if ("JBLayeredPane" in component.toString()) {
                 mainComponentPane = component as Container
+                break
             }
         }
 
