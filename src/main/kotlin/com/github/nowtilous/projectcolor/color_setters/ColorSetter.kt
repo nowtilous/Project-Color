@@ -13,35 +13,30 @@ import javax.swing.JFrame
 
 abstract class ColorSetter {
 
+    // Title bar's component path down from the main ide component (differs between operating systems)
     abstract val TITLE_BAR_COMPONENT_PATH: List<String>
 
     abstract fun setTitleBar(color: Color, project: Project)
 
     /**
-     * Set foreground recursively for given component,
-     * since intellij overrides this property specifically
-     * somewhere down the component tree, this needs to be set at all components
-     * in order to actually change the foreground color:(
+     * Set a given property's color recursively for given component.
      *
      * @param container: the root component (as container)
-     * @param color: color to set the foreground to
+     * @param color: color to set the property to
+     * @param property: property to repaint
      */
-    protected fun recursiveSetForeground(container: Container, color: Color) {
-        container.foreground = color
-        for (comp in container.components) {
-            if ((comp as Container).components.isNotEmpty()) {
-                recursiveSetForeground(comp, color)
-            }
-            comp.foreground = color
+    protected fun recursiveSetComponentColor(container: Container, color: Color, property: String) {
+
+        when (property) {
+            "background" -> container.background = color
+            "foreground" -> container.foreground = color
+            else -> throw InvalidParameterException("Unsupported property given!")
         }
-    }
-    protected fun recursiveSetbackground(container: Container, color: Color) {
-        container.background = color
+
         for (comp in container.components) {
             if ((comp as Container).components.isNotEmpty()) {
-                recursiveSetForeground(comp, color)
+                recursiveSetComponentColor(comp, color, property)
             }
-            comp.background = color
         }
     }
 
@@ -76,13 +71,17 @@ abstract class ColorSetter {
         }
     }
 
-    protected open fun findTitleBarComponent(project: Project): Component{
+    protected open fun findTitleBarComponent(project: Project): Container {
         val mainIdeComponent = (WindowManager.getInstance().getFrame(project) as JFrame).getComponent(0) as Container
 
-        var currentComponent = mainIdeComponent
+        return findComponent(mainIdeComponent, TITLE_BAR_COMPONENT_PATH) as Container
+    }
+
+    protected fun findComponent(root: Container, path: List<String>): Component {
+        var currentComponent = root
         var found = false
 
-        for(componentName in TITLE_BAR_COMPONENT_PATH){
+        for (componentName in path) {
             for (component in currentComponent.components) {
                 if (componentName in component.toString()) {
                     currentComponent = component as Container
@@ -97,5 +96,4 @@ abstract class ColorSetter {
 
         return currentComponent
     }
-
 }

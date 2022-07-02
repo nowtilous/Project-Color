@@ -1,20 +1,20 @@
 package com.github.nowtilous.projectcolor.color_setters
 
 import com.github.nowtilous.projectcolor.gProjectColorMap
+import com.github.nowtilous.projectcolor.utils.getForegroundColorBasedOnBrightness
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.WindowManager
-import com.intellij.ui.ColorUtil
 import java.awt.Color
 import java.awt.Component
 import java.awt.Container
 import javax.swing.JFrame
 
-class WindowsColorSetter: ColorSetter() {
+class WindowsColorSetter : ColorSetter() {
 
     override val TITLE_BAR_COMPONENT_PATH = listOf("JBLayeredPane", "MenuFrameHeader")
 
     override fun setTitleBar(color: Color, project: Project) {
-        val titleBarComponent: Container = findTitleBarComponent(project) as Container
+        val titleBarComponent: Container = findTitleBarComponent(project)
         val projectLabelComponent: Component = findProjectLabelComponent(titleBarComponent)
         lockComponentColorProperty(project, titleBarComponent, "background")
         lockComponentColorProperty(project, projectLabelComponent, "foreground")
@@ -22,7 +22,7 @@ class WindowsColorSetter: ColorSetter() {
         // set the color
         gProjectColorMap[project] = color
         titleBarComponent.background = color
-        recursiveSetForeground(titleBarComponent, if (ColorUtil.isDark(color)) Color.white else Color.black)
+        recursiveSetComponentColor(titleBarComponent,getForegroundColorBasedOnBrightness(color), "foreground")
     }
 
 
@@ -33,7 +33,7 @@ class WindowsColorSetter: ColorSetter() {
      * @throws ClassNotFoundException if none found
      * @returns the component if found, null otherwise.
      */
-    override fun findTitleBarComponent(project: Project): Component {
+    override fun findTitleBarComponent(project: Project): Container {
         val mainIdeComponent = (WindowManager.getInstance().getFrame(project) as JFrame).getComponent(0) as Container
         var mainComponentPane: Container? = null
 
@@ -47,7 +47,7 @@ class WindowsColorSetter: ColorSetter() {
         if (mainComponentPane != null) {
             for (component in mainComponentPane.components) {
                 if ("MenuFrameHeader" in component.toString()) {
-                    return component
+                    return component as Container
                 }
             }
         }

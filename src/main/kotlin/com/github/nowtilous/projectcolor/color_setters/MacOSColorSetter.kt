@@ -7,19 +7,25 @@ import java.awt.Container
 
 class MacOSColorSetter : ColorSetter() {
 
-    override val TITLE_BAR_COMPONENT_PATH = listOf("JBLayeredPane", "JBPanel", "NonOpaquePanel", "JBBox", "navbar")
+    override val TITLE_BAR_COMPONENT_PATH = listOf("JBLayeredPane", "JBPanel", "NonOpaquePanel", "JBBox")
 
     override fun setTitleBar(color: Color, project: Project) {
 
-        val navBarComponent = findTitleBarComponent(project) as Container
-        val filePathComponent = findFilePathComponent(navBarComponent)
+        val titleBarComponent = findTitleBarComponent(project)
+        val filePathComponent = findFilePathComponent(titleBarComponent)
 
-        recursiveSetbackground(navBarComponent, color)
-        recursiveSetForeground(filePathComponent, getForegroundColorBasedOnBrightness(color))
-        lockComponentColorProperty(project, navBarComponent, "background")
+        recursiveSetComponentColor(titleBarComponent, color, "background")
+        recursiveSetComponentColor(filePathComponent, getForegroundColorBasedOnBrightness(color), "foreground")
     }
 
-    private fun findFilePathComponent(navBarComponent: Container): Container {
+    /**
+     * Search for file path component that appears in the navbar,
+     * which we need to change to foreground color of the text.
+     *
+     * @note this is used instead of findComponent because it has a different searching algorithm.
+     */
+    private fun findFilePathComponent(titleBarComponent: Container): Container {
+        val navBarComponent = findComponent(titleBarComponent, listOf("navbar")) as Container
         for (component in navBarComponent.components) {
             for (subComponent in (component as Container).components) {
                 if ("JBScrollPane" in subComponent.toString()) {
