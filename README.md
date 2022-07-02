@@ -23,7 +23,7 @@ to colorize each project's title bar, which is visible from the taskbar windows 
 Supports all Intellij IDEs from version 2021.1 (211) and above!
 > ✅ Tested on all versions from 2021.1 to 2022.1 
 
-> ⚠️ Probably doesn't work on MacOS☹️
+> ✅ Supports Windows, and as of version 1.2, MacOS too!
 ## Installation 🛠️
 
 - Using IDE built-in plugin system:
