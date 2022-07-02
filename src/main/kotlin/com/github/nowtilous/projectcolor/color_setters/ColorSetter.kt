@@ -98,7 +98,12 @@ abstract class ColorSetter {
      * @note registers a PropertyChangeListener for given property name which `aggressively`
      * reverts the color back to the one set by this plugin.
      */
-    protected fun lockComponentColorProperty(project: Project, component: Component, property: String) {
+    protected fun lockComponentColorProperty(
+        project: Project,
+        component: Component,
+        property: String,
+        recursive: Boolean = false
+    ) {
         if (!gColorLockedComponentMap.containsKey(component)) {
             gColorLockedComponentMap[component] = false
         }
@@ -117,5 +122,12 @@ abstract class ColorSetter {
 
             gColorLockedComponentMap[component] = true
         }
+
+        if(recursive){
+            for (subComponent in (component as Container).components){
+                lockComponentColorProperty(project, subComponent, property, true)
+            }
+        }
+
     }
 }
