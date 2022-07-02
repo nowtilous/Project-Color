@@ -82,9 +82,7 @@ abstract class ColorSetter {
         }
 
         for (comp in container.components) {
-            if ((comp as Container).components.isNotEmpty()) {
-                recursiveSetComponentColor(comp, color, property)
-            }
+            recursiveSetComponentColor(comp as Container, color, property)
         }
     }
 
