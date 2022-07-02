@@ -31,7 +31,7 @@ class WindowsColorSetter : ColorSetter() {
      *
      * @note searches using java swing object names, which might change in future versions.
      * @throws ClassNotFoundException if none found
-     * @returns the component if found, null otherwise.
+     * @return the component if found, null otherwise.
      */
     override fun findTitleBarComponent(project: Project): Container {
         val mainIdeComponent = (WindowManager.getInstance().getFrame(project) as JFrame).getComponent(0) as Container

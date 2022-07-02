@@ -21,7 +21,5 @@ class ProjectService(project: Project) {
                 setTitleBarColor(Color(rgb), project)
             }
         }
-
-
     }
 }
