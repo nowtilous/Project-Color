@@ -28,9 +28,12 @@ abstract class ColorSetter {
     /**
      * Retrieve the title bar component for given project.
      */
-    protected open fun findTitleBarComponent(project: Project): Container {
+    protected open fun findTitleBarComponent(
+        project: Project,
+        path: List<String> = TITLE_BAR_COMPONENT_PATH
+    ): Container {
         val mainIdeComponent = (WindowManager.getInstance().getFrame(project) as JFrame).getComponent(0) as Container
-        return findComponent(mainIdeComponent, TITLE_BAR_COMPONENT_PATH) as Container
+        return findComponent(mainIdeComponent, path) as Container
     }
 
     /**
@@ -80,7 +83,6 @@ abstract class ColorSetter {
             "foreground" -> container.foreground = color
             else -> throw InvalidParameterException("Unsupported property given!")
         }
-
         for (comp in container.components) {
             recursiveSetComponentColor(comp as Container, color, property)
         }
@@ -99,7 +101,7 @@ abstract class ColorSetter {
     protected fun lockComponentColorProperty(
         project: Project,
         component: Component,
-        property: String,
+        property: String = "both",
         recursive: Boolean = false
     ) {
         if (!gColorLockedComponentMap.containsKey(component)) {
@@ -107,25 +109,32 @@ abstract class ColorSetter {
         }
 
         if (gColorLockedComponentMap[component] == false) {
-            component.addPropertyChangeListener(property) {
-                if (project in gProjectColorMap && it.newValue != (gProjectColorMap[project] as Color).rgb) {
-                    val color = gProjectColorMap[project] as Color
-                    when (property) {
-                        "background" -> component.background = color
-                        "foreground" -> component.foreground = if (ColorUtil.isDark(color)) Color.white else Color.black
-                        else -> throw InvalidParameterException("Unsupported property given!")
-                    }
-                }
+            if (property == "both") {
+                addPropertyChangeListener(project, component, "foreground")
+                addPropertyChangeListener(project, component, "background")
+            } else {
+                addPropertyChangeListener(project, component, property)
             }
-
             gColorLockedComponentMap[component] = true
         }
 
-        if(recursive){
-            for (subComponent in (component as Container).components){
+        if (recursive) {
+            for (subComponent in (component as Container).components) {
                 lockComponentColorProperty(project, subComponent, property, true)
             }
         }
+    }
 
+    private fun addPropertyChangeListener(project: Project, component: Component, property: String) {
+        component.addPropertyChangeListener(property) {
+
+            if (project in gProjectColorMap && it.newValue != (gProjectColorMap[project] as Color).rgb) {
+                val color = gProjectColorMap[project] as Color
+                when (property) {
+                    "background" -> component.background = color
+                    "foreground" -> component.foreground = if (ColorUtil.isDark(color)) Color.white else Color.black
+                }
+            }
+        }
     }
 }
