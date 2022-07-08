@@ -16,8 +16,8 @@ val gProjectColorMap = mutableMapOf<Project, Color>()
  */
 fun setTitleBarColor(color: Color, project: Project) {
 
+    gProjectColorMap[project] = color
     ColorSetterFactory.getColorSetter().setTitleBar(color, project)
-
     // save color config for persistence
     PropertiesComponent.getInstance(project).setValue(COLOR_SETTING_PATH, color.rgb, 0)
 }
