@@ -15,7 +15,7 @@
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
     <actions>
-        <action id="ChooseColorAction" class="com.github.nowtilous.projectcolor.ChooseColorAction"
+        <action id="ChooseColorAction" class="com.github.nowtilous.projectcolor.ui.ChooseColorAction"
                 text="Choose Color Menu" description="Choose a title bar background color from the menu"
                 icon="AllIcons.Actions.Colors">
             <add-to-group group-id="ToolbarRunGroup" anchor="last"/>
