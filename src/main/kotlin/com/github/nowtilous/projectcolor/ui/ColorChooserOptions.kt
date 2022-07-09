@@ -1,17 +1,18 @@
 package com.github.nowtilous.projectcolor.ui
 
+import com.github.nowtilous.projectcolor.OVERRIDE_AUTO_COLOR_CONFIG
 import com.github.nowtilous.projectcolor.setTitleBarColor
+import com.github.nowtilous.projectcolor.utils.getColorBasedOnProjectName
 import com.intellij.ide.util.PropertiesComponent
 import com.intellij.openapi.project.ProjectManager
-import java.awt.Color
 import javax.swing.Icon
 import javax.swing.ImageIcon
 import javax.swing.JCheckBox
 import javax.swing.colorchooser.AbstractColorChooserPanel
 
-class ColorChooserOptionsPanel : AbstractColorChooserPanel() {
+const val AUTO_COLOR_SET_TOGGLED_PATH = "com.github.nowtilous.projectcolor.auto_rgb"
 
-    private val AUTO_COLOR_SET_TOGGLED_PATH = "com.github.nowtilous.projectcolor.auto_rgb"
+class ColorChooserOptionsPanel : AbstractColorChooserPanel() {
 
     override fun updateChooser() {
     }
@@ -25,7 +26,8 @@ class ColorChooserOptionsPanel : AbstractColorChooserPanel() {
             val toggledOn = (it.source as JCheckBox).isSelected
             if (toggledOn) {
                 for (project in ProjectManager.getInstance().openProjects) {
-                    setTitleBarColor(Color(project.name.hashCode()), project)
+                    PropertiesComponent.getInstance(project).setValue(OVERRIDE_AUTO_COLOR_CONFIG, false)
+                    setTitleBarColor(getColorBasedOnProjectName(project), project)
                 }
             }
 
