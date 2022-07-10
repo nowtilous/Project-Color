@@ -16,5 +16,5 @@ fun getForegroundColorBasedOnBrightness(color: Color): Color {
  * Generate color from hash of given project's name.
  */
 fun getColorBasedOnProjectName(project: Project): Color {
-    return Color(project.name.hashCode())
+    return Color(project.name.hashCode() % 255)
 }
