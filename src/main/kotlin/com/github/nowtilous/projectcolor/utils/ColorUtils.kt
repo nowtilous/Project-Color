@@ -1,5 +1,6 @@
 package com.github.nowtilous.projectcolor.utils
 
+import com.intellij.openapi.project.Project
 import com.intellij.ui.ColorUtil
 import java.awt.Color
 
@@ -9,4 +10,11 @@ import java.awt.Color
  */
 fun getForegroundColorBasedOnBrightness(color: Color): Color {
     return if (ColorUtil.isDark(color)) Color.white else Color.black
+}
+
+/**
+ * Generate color from hash of given project's name.s
+ */
+fun getColorBasedOnProjectName(project: Project): Color {
+    return Color(project.name.hashCode())
 }
