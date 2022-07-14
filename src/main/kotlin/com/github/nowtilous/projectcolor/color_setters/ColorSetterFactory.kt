@@ -12,7 +12,8 @@ import com.intellij.openapi.externalSystem.service.execution.NotSupportedExcepti
 object ColorSetterFactory {
     private val mColorSetterMap = mapOf(
         (OSTypeFactory.OSType.Windows to WindowsColorSetter()),
-        (OSTypeFactory.OSType.MacOS to MacOSColorSetter())
+        (OSTypeFactory.OSType.MacOS to MacOSColorSetter()),
+        (OSTypeFactory.OSType.Linux to LinuxColorSetter())
     )
 
     private lateinit var mColorSetter: ColorSetter
