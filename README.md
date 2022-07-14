@@ -1,4 +1,4 @@
-# Project-Color
+# 🟩🟦 Project-Color 🟨🟥
 
 ![Build](https://github.com/nowtilous/Project-Color/workflows/Build/badge.svg)
 [![Version](https://img.shields.io/jetbrains/plugin/v/19463.svg)](https://plugins.jetbrains.com/plugin/19463)
@@ -23,6 +23,8 @@ to colorize each project's title bar, which is visible from the taskbar windows 
 Supports all Intellij IDEs from version 2021.1 (211) and above!
 > ✅ Tested on all versions from 2021.1 to 2022.1 
 
+> ✅ Works on all Intellij products
+
 > ✅ Supports Windows🪟, MacOS🍎 , and Linux🐧 distributions (that Jetbrains support)! 
 
 ## Features 💪
@@ -30,6 +32,9 @@ Supports all Intellij IDEs from version 2021.1 (211) and above!
   > ❔ Next to the build icons, a colorful cube button will popup a menu which allows you to choose colors from.
   - Automaticaly select colors for all projects, based on every project name.
   > ❔ In the color chooser menu, select the 'Options' tab, and check the auto color set checkbox.
+  
+  > ⚠️ Available from version 1.3!
+  
   - The foreground color is highlighted according to the darkness of the chosen color, in order to have a comfortable contrast from the background.
 ## Installation 🛠️
 
