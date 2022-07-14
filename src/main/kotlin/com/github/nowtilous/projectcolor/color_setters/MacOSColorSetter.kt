@@ -5,7 +5,7 @@ import com.intellij.openapi.project.Project
 import java.awt.Color
 import java.awt.Container
 
-class MacOSColorSetter : ColorSetter() {
+open class MacOSColorSetter : ColorSetter() {
 
     override val TITLE_BAR_COMPONENT_PATH = listOf("JBLayeredPane", "JBPanel", "NonOpaquePanel", "JBBox")
 

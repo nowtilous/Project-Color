@@ -12,6 +12,7 @@ const val COLOR_SETTING_PATH = "com.github.nowtilous.projectcolor.rgb"
 const val OVERRIDE_AUTO_COLOR_CONFIG = "com.github.nowtilous.projectcolor.override_auto_rgb"
 val gColorLockedComponentMap = mutableMapOf<Component, Boolean>()
 val gProjectColorMap = mutableMapOf<Project, Color>()
+val gProjectColorLockedMap = mutableMapOf<Project, Boolean>()
 
 /**
  * Set title bar color with given color for given project.
