@@ -23,7 +23,14 @@ to colorize each project's title bar, which is visible from the taskbar windows 
 Supports all Intellij IDEs from version 2021.1 (211) and above!
 > ✅ Tested on all versions from 2021.1 to 2022.1 
 
-> ✅ Supports Windows, and as of version 1.2, MacOS too!
+> ✅ Supports Windows🪟, MacOS🍎 , and Linux🐧 distributions (that Jetbrains support)! 
+
+## Features 💪
+  - Set menu frame color (as shown in the Screenshots section).
+  > ❔ Next to the build icons, a colorful cube button will popup a menu which allows you to choose colors from.
+  - Automaticaly select colors for all projects, based on every project name.
+  > ❔ In the color chooser menu, select the 'Options' tab, and check the auto color set checkbox.
+  - The foreground color is highlighted according to the darkness of the chosen color, in order to have a comfortable contrast from the background.
 ## Installation 🛠️
 
 - Using IDE built-in plugin system:
