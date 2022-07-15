@@ -30,7 +30,7 @@ Supports all Intellij IDEs from version 2021.1 (211) and above!
 ## Features 💪
   - Set menu frame color (as shown in the Screenshots section).
   > ❔ Next to the build icons, a colorful cube button will popup a menu which allows you to choose colors from.
-  - Automaticaly select colors for all projects, based on every project name.
+  - Automatically select colors for all projects, based on every project name.
   > ❔ In the color chooser menu, select the 'Options' tab, and check the auto color set checkbox.
   
   > ⚠️ Available from version 1.3!
