@@ -30,9 +30,15 @@ abstract class ColorSetter {
     abstract fun setTitleBar(color: Color, project: Project)
 
     /**
+     * Additional cleanup on project close (if necessary).
+     */
+    open fun cleanUp(project: Project){
+    }
+
+    /**
      * Retrieve the title bar component for given project.
      */
-    protected open fun findTitleBarComponent(
+    open fun findTitleBarComponent(
         project: Project,
         path: List<String> = TITLE_BAR_COMPONENT_PATH
     ): Container {
@@ -131,7 +137,6 @@ abstract class ColorSetter {
 
     private fun addPropertyChangeListener(project: Project, component: Component, property: String) {
         component.addPropertyChangeListener(property) {
-
             if (project in gProjectColorMap && it.newValue != (gProjectColorMap[project] as Color).rgb) {
                 val color = gProjectColorMap[project] as Color
                 when (property) {
@@ -163,7 +168,11 @@ abstract class ColorSetter {
                 }
 
                 override fun componentRemoved(e: ContainerEvent?) {
-                    gProjectColorMap[project]?.let { setTitleBarColor(it, project) }
+                    try {
+                        gProjectColorMap[project]?.let { setTitleBarColor(it, project) }
+                    } catch (_: NullPointerException) {
+                        // could happen if current project is closing, nothing to do about it
+                    }
                 }
             })
             gProjectColorLockedMap[project] = true
