@@ -3,7 +3,9 @@
 ![Build](https://github.com/nowtilous/Project-Color/workflows/Build/badge.svg)
 [![Version](https://img.shields.io/jetbrains/plugin/v/19463.svg)](https://plugins.jetbrains.com/plugin/19463)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/19463.svg)](https://plugins.jetbrains.com/plugin/19463)
-
+![](https://img.shields.io/github/issues-closed/nowtilous/Project-Color)
+![](https://img.shields.io/github/issues/nowtilous/Project-Color)
+![](https://img.shields.io/jetbrains/plugin/r/rating/19463)
 
 <!-- Plugin description -->
 Remember your projects by color! Colorize the title bar to differentiate your open projects.
