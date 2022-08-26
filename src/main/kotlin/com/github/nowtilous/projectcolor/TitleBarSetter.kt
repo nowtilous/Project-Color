@@ -11,6 +11,7 @@ import java.awt.Component
 const val COLOR_SETTING_PATH = "com.github.nowtilous.projectcolor.rgb"
 const val OVERRIDE_AUTO_COLOR_CONFIG = "com.github.nowtilous.projectcolor.override_auto_rgb"
 val gColorLockedComponentMap = mutableMapOf<Component, Boolean>()
+val gProjectLockedComponentsMap = mutableMapOf<Project, List<Component>>()
 val gProjectColorMap = mutableMapOf<Project, Color>()
 val gProjectColorLockedMap = mutableMapOf<Project, Boolean>()
 

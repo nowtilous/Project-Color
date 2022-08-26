@@ -1,9 +1,6 @@
 package com.github.nowtilous.projectcolor.color_setters
 
-import com.github.nowtilous.projectcolor.gColorLockedComponentMap
-import com.github.nowtilous.projectcolor.gProjectColorMap
-import com.github.nowtilous.projectcolor.gProjectColorLockedMap
-import com.github.nowtilous.projectcolor.setTitleBarColor
+import com.github.nowtilous.projectcolor.*
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.WindowManager
 import com.intellij.ui.ColorUtil
@@ -32,7 +29,7 @@ abstract class ColorSetter {
     /**
      * Additional cleanup on project close (if necessary).
      */
-    open fun cleanUp(project: Project){
+    open fun cleanUp(project: Project) {
     }
 
     /**
@@ -126,6 +123,12 @@ abstract class ColorSetter {
                 addPropertyChangeListener(project, component, property)
             }
             gColorLockedComponentMap[component] = true
+        }
+
+        if (project in gProjectLockedComponentsMap) {
+            gProjectLockedComponentsMap[project]?.plus(component)
+        } else {
+            gProjectLockedComponentsMap[project] = mutableListOf(component)
         }
 
         if (recursive) {
