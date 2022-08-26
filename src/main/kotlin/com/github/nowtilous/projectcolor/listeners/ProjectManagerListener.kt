@@ -4,6 +4,7 @@ import com.github.nowtilous.projectcolor.color_setters.ColorSetterFactory
 import com.github.nowtilous.projectcolor.gColorLockedComponentMap
 import com.github.nowtilous.projectcolor.gProjectColorLockedMap
 import com.github.nowtilous.projectcolor.gProjectColorMap
+import com.github.nowtilous.projectcolor.gProjectLockedComponentsMap
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManagerListener
@@ -17,9 +18,15 @@ internal class ProjectManagerListener : ProjectManagerListener {
 
     override fun projectClosed(project: Project) {
         val currentColorSetter = ColorSetterFactory.getColorSetter()
-        gProjectColorMap.remove(project)
-        gProjectColorLockedMap.remove(project)
-        gColorLockedComponentMap.remove(currentColorSetter.findTitleBarComponent(project))
-        currentColorSetter.cleanUp(project)
+        try {
+            gProjectColorMap.remove(project)
+            gProjectColorLockedMap.remove(project)
+            for(component in gProjectLockedComponentsMap[project]!!){
+                gColorLockedComponentMap.remove(component)
+            }
+            gProjectLockedComponentsMap.remove(project)
+            currentColorSetter.cleanUp(project)
+        } catch (_: Exception) {
+        }
     }
 }
