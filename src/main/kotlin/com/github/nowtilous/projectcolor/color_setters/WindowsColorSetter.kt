@@ -1,6 +1,5 @@
 package com.github.nowtilous.projectcolor.color_setters
 
-import com.github.nowtilous.projectcolor.gColorLockedComponentMap
 import com.github.nowtilous.projectcolor.utils.getForegroundColorBasedOnBrightness
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.impl.IdeMenuBar
@@ -32,16 +31,5 @@ class WindowsColorSetter : ColorSetter() {
             }
         }
         throw ClassNotFoundException()
-    }
-
-    override fun cleanUp(project: Project) {
-        unlockComponentsColors(findTitleBarComponent(project))
-    }
-
-    private fun unlockComponentsColors(container: Container){
-        for (component in container.components){
-            gColorLockedComponentMap.remove(component)
-            unlockComponentsColors(component as Container)
-        }
     }
 }
