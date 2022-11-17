@@ -21,4 +21,7 @@
             <add-to-group group-id="ToolbarRunGroup" anchor="last"/>
         </action>
     </actions>
+    <incompatible-with>
+        com.intellij.modules.rider
+    </incompatible-with>
 </idea-plugin>
