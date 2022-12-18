@@ -25,7 +25,9 @@ open class MacOSColorSetter : ColorSetter() {
      * @note this is used instead of findComponent because it has a different searching algorithm.
      */
     private fun findFilePathComponent(titleBarComponent: Container): Container {
-        val navBarComponent = findComponent(titleBarComponent, listOf("navbar")) as Container
+        val navBarComponent = findComponent(titleBarComponent,
+            listOf("NavBarRootPaneExtension")
+        ) as Container
         for (component in navBarComponent.components) {
             for (subComponent in (component as Container).components) {
                 if ("JBScrollPane" in subComponent.toString()) {
